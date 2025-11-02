@@ -8,6 +8,8 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         * {
@@ -119,6 +121,17 @@
             font-weight: 900;
             color: white;
             letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .phone-number:hover {
+            transform: scale(1.05);
+        }
+
+        .phone-link {
+            color: inherit;
+            text-decoration: none;
         }
 
         /* Content Section */
@@ -186,52 +199,19 @@
             line-height: 1.5;
         }
 
-        /* Before/After Section */
-        .comparison-wrapper {
+        /* Map Section */
+        .map-wrapper {
             background: #f8f9fa;
             padding: 40px;
             border-radius: 16px;
             margin-bottom: 50px;
         }
 
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .comparison-item {
-            position: relative;
+        .map-container {
+            height: 450px;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        .comparison-item img {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .comparison-label {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 15px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            text-align: center;
-            color: white;
-        }
-
-        .label-before {
-            background: linear-gradient(180deg, transparent 0%, rgba(220, 38, 38, 0.95) 100%);
-        }
-
-        .label-after {
-            background: linear-gradient(180deg, transparent 0%, rgba(16, 185, 129, 0.95) 100%);
         }
 
         /* CTA Section */
@@ -330,12 +310,12 @@
                 grid-template-columns: 1fr;
             }
 
-            .comparison-grid {
-                grid-template-columns: 1fr;
+            .map-wrapper {
+                padding: 25px;
             }
 
-            .comparison-wrapper {
-                padding: 25px;
+            .map-container {
+                height: 350px;
             }
 
             .cta-section {
@@ -419,7 +399,9 @@
                         </p>
                         <div className="phone-hero">
                             <div className="phone-label">Call Chris</div>
-                            <div className="phone-number">0417 035 368</div>
+                            <a href="tel:0417035368" className="phone-link">
+                                <div className="phone-number">0417 035 368</div>
+                            </a>
                         </div>
                     </div>
 
@@ -443,29 +425,16 @@
                             ))}
                         </div>
 
-                        {/* Before/After */}
-                        <div className="comparison-wrapper">
+                        {/* Service Area Map */}
+                        <div className="map-wrapper">
                             <div className="section-header" style={{marginBottom: '30px'}}>
-                                <h2 className="section-title">The Work You'll Master</h2>
+                                <h2 className="section-title">Service Area</h2>
                                 <p className="section-desc">
-                                    Transform old, moldy silicone into fresh, waterproof seals
+                                    Must live within 15km of Sandringham, VIC
                                 </p>
                             </div>
 
-                            <div className="comparison-grid">
-                                <div className="comparison-item">
-                                    <img id="before-img" alt="Before - Old Silicone" />
-                                    <div className="comparison-label label-before">
-                                        ❌ BEFORE - Old & Moldy
-                                    </div>
-                                </div>
-                                <div className="comparison-item">
-                                    <img id="after-img" alt="After - New Silicone" />
-                                    <div className="comparison-label label-after">
-                                        ✅ AFTER - Fresh & Professional
-                                    </div>
-                                </div>
-                            </div>
+                            <div id="map" className="map-container"></div>
                         </div>
 
                         {/* CTA */}
@@ -495,143 +464,34 @@
     </script>
 
     <script>
-        // Enhanced shower image generation
-        function createShowerImage(isAfter) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 800;
-            canvas.height = 600;
-            const ctx = canvas.getContext('2d');
-
-            // Base shower tile background - more realistic
-            const gradient = ctx.createLinearGradient(0, 0, 0, 600);
-            gradient.addColorStop(0, '#f5f5f5');
-            gradient.addColorStop(1, '#e8e8e8');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 800, 600);
-
-            // Draw tiles with grout lines
-            ctx.strokeStyle = '#d0d0d0';
-            ctx.lineWidth = 3;
-
-            // Vertical lines
-            for (let i = 0; i < 800; i += 100) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, 600);
-                ctx.stroke();
-            }
-
-            // Horizontal lines
-            for (let i = 0; i < 600; i += 100) {
-                ctx.beginPath();
-                ctx.moveTo(0, i);
-                ctx.lineTo(800, i);
-                ctx.stroke();
-            }
-
-            // Add tile texture
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-            for (let x = 0; x < 800; x += 100) {
-                for (let y = 0; y < 600; y += 100) {
-                    ctx.fillRect(x + 10, y + 10, 30, 30);
-                }
-            }
-
-            // Draw shower base
-            const baseGradient = ctx.createLinearGradient(0, 480, 0, 600);
-
-            if (isAfter) {
-                // Clean, bright base
-                baseGradient.addColorStop(0, '#ffffff');
-                baseGradient.addColorStop(1, '#f8f8f8');
-                ctx.fillStyle = baseGradient;
-                ctx.fillRect(0, 480, 800, 120);
-
-                // Perfect silicone bead - clean white
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
-                ctx.shadowBlur = 5;
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 16;
-                ctx.lineCap = 'round';
-                ctx.beginPath();
-                ctx.moveTo(0, 485);
-                ctx.lineTo(800, 485);
-                ctx.stroke();
-
-                // Highlight on silicone
-                ctx.shadowBlur = 0;
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-                ctx.lineWidth = 6;
-                ctx.beginPath();
-                ctx.moveTo(0, 482);
-                ctx.lineTo(800, 482);
-                ctx.stroke();
-
-            } else {
-                // Dirty, stained base
-                baseGradient.addColorStop(0, '#e8e5d8');
-                baseGradient.addColorStop(1, '#d4d4c8');
-                ctx.fillStyle = baseGradient;
-                ctx.fillRect(0, 480, 800, 120);
-
-                // Old, discolored silicone
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-                ctx.shadowBlur = 8;
-                ctx.strokeStyle = '#9b8b6b';
-                ctx.lineWidth = 20;
-                ctx.lineCap = 'round';
-                ctx.beginPath();
-                ctx.moveTo(0, 485);
-                ctx.lineTo(800, 485);
-                ctx.stroke();
-
-                // Add heavy mold spots
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = 'rgba(40, 40, 40, 0.7)';
-                for (let i = 0; i < 50; i++) {
-                    const x = Math.random() * 800;
-                    const y = 475 + Math.random() * 25;
-                    const size = 2 + Math.random() * 10;
-                    ctx.beginPath();
-                    ctx.arc(x, y, size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                // Additional brownish stains
-                ctx.fillStyle = 'rgba(139, 115, 85, 0.5)';
-                for (let i = 0; i < 30; i++) {
-                    const x = Math.random() * 800;
-                    const y = 475 + Math.random() * 25;
-                    const size = 5 + Math.random() * 12;
-                    ctx.beginPath();
-                    ctx.arc(x, y, size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                // Cracks and gaps in old silicone
-                ctx.strokeStyle = 'rgba(80, 60, 40, 0.8)';
-                ctx.lineWidth = 2;
-                for (let i = 0; i < 15; i++) {
-                    const x = Math.random() * 800;
-                    ctx.beginPath();
-                    ctx.moveTo(x, 480);
-                    ctx.lineTo(x + (Math.random() * 10 - 5), 495);
-                    ctx.stroke();
-                }
-            }
-
-            return canvas.toDataURL('image/jpeg', 0.92);
-        }
-
-        // Set images once DOM is loaded
+        // Initialize map when page loads
         window.addEventListener('load', () => {
             setTimeout(() => {
-                const beforeImg = document.getElementById('before-img');
-                const afterImg = document.getElementById('after-img');
+                // Sandringham, VIC coordinates
+                const sandringham = [-37.9537, 145.0042];
 
-                if (beforeImg) beforeImg.src = createShowerImage(false);
-                if (afterImg) afterImg.src = createShowerImage(true);
-            }, 100);
+                // Initialize map
+                const map = L.map('map').setView(sandringham, 12);
+
+                // Add tile layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 19
+                }).addTo(map);
+
+                // Add marker for Sandringham
+                L.marker(sandringham).addTo(map)
+                    .bindPopup('<strong>Sandringham</strong><br>Base Location')
+                    .openPopup();
+
+                // Add 15km radius circle
+                L.circle(sandringham, {
+                    color: '#FF6B35',
+                    fillColor: '#FF6B35',
+                    fillOpacity: 0.15,
+                    radius: 15000 // 15km in meters
+                }).addTo(map);
+            }, 500);
         });
     </script>
 </body>
