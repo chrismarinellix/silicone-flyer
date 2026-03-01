@@ -328,6 +328,175 @@
             }
         }
 
+        /* Before/After Section */
+        .before-after-wrapper {
+            margin-bottom: 50px;
+        }
+
+        .before-after-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .comparison-card {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .comparison-label {
+            padding: 12px 20px;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .comparison-label.before {
+            background: #ef4444;
+            color: white;
+        }
+
+        .comparison-label.after {
+            background: #10B981;
+            color: white;
+        }
+
+        .tile-scene {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shared tile styles */
+        .tile-scene .tile-bg {
+            position: absolute;
+            inset: 0;
+        }
+
+        .tile-scene .tile-row {
+            display: flex;
+            height: 50%;
+        }
+
+        .tile-scene .tile {
+            flex: 1;
+            margin: 2px;
+            border-radius: 2px;
+        }
+
+        /* Before scene - stained tiles, moldy silicone */
+        .tile-scene.before-scene .tile-bg {
+            background: #d4cfc5;
+        }
+
+        .tile-scene.before-scene .tile {
+            background: #e8e0d0;
+        }
+
+        .tile-scene.before-scene .tile:nth-child(odd) {
+            background: #ddd5c5;
+        }
+
+        .tile-scene.before-scene .silicone-line {
+            position: absolute;
+            background: #5a4a3a;
+            border-radius: 1px;
+        }
+
+        .tile-scene.before-scene .silicone-line.horizontal {
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 6px;
+            transform: translateY(-50%);
+            background: linear-gradient(90deg, #5a4a3a 0%, #3d3228 20%, #6b5a48 35%, #4a3a2a 55%, #5a4a3a 70%, #3d3228 100%);
+        }
+
+        .tile-scene.before-scene .silicone-line.vertical {
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 6px;
+            transform: translateX(-50%);
+            background: linear-gradient(180deg, #5a4a3a 0%, #3d3228 25%, #6b5a48 40%, #4a3a2a 60%, #5a4a3a 80%, #3d3228 100%);
+        }
+
+        .tile-scene.before-scene .mold-spot {
+            position: absolute;
+            border-radius: 50%;
+            background: #2d2418;
+            opacity: 0.7;
+        }
+
+        /* After scene - clean tiles, fresh silicone */
+        .tile-scene.after-scene .tile-bg {
+            background: #e8e8e8;
+        }
+
+        .tile-scene.after-scene .tile {
+            background: #ffffff;
+        }
+
+        .tile-scene.after-scene .tile:nth-child(odd) {
+            background: #fafafa;
+        }
+
+        .tile-scene.after-scene .silicone-line {
+            position: absolute;
+            border-radius: 2px;
+        }
+
+        .tile-scene.after-scene .silicone-line.horizontal {
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 5px;
+            transform: translateY(-50%);
+            background: linear-gradient(90deg, #f5f5f5 0%, #ffffff 50%, #f5f5f5 100%);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tile-scene.after-scene .silicone-line.vertical {
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 5px;
+            transform: translateX(-50%);
+            background: linear-gradient(180deg, #f5f5f5 0%, #ffffff 50%, #f5f5f5 100%);
+            box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tile-scene.after-scene .shine {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        .comparison-caption {
+            padding: 16px 20px;
+            background: #f8f9fa;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .before-after-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tile-scene {
+                height: 180px;
+            }
+        }
+
         /* Print Styles */
         @media print {
             body {
@@ -433,6 +602,73 @@
                             ))}
                         </div>
 
+                        {/* Before/After Comparison */}
+                        <div className="before-after-wrapper">
+                            <div className="section-header">
+                                <h2 className="section-title">See the Difference</h2>
+                                <p className="section-desc">
+                                    Professional silicone resealing transforms tired, moldy showers
+                                </p>
+                            </div>
+
+                            <div className="before-after-grid">
+                                {/* Before Card */}
+                                <div className="comparison-card">
+                                    <div className="comparison-label before">Before</div>
+                                    <div className="tile-scene before-scene">
+                                        <div className="tile-bg">
+                                            <div className="tile-row">
+                                                <div className="tile"></div>
+                                                <div className="tile"></div>
+                                            </div>
+                                            <div className="tile-row">
+                                                <div className="tile"></div>
+                                                <div className="tile"></div>
+                                            </div>
+                                        </div>
+                                        <div className="silicone-line horizontal"></div>
+                                        <div className="silicone-line vertical"></div>
+                                        <div className="mold-spot" style={{top: '46%', left: '20%', width: '12px', height: '10px'}}></div>
+                                        <div className="mold-spot" style={{top: '52%', left: '35%', width: '8px', height: '8px'}}></div>
+                                        <div className="mold-spot" style={{top: '44%', left: '60%', width: '14px', height: '10px'}}></div>
+                                        <div className="mold-spot" style={{top: '53%', left: '75%', width: '10px', height: '9px'}}></div>
+                                        <div className="mold-spot" style={{top: '48%', left: '90%', width: '9px', height: '8px'}}></div>
+                                        <div className="mold-spot" style={{top: '20%', left: '48%', width: '10px', height: '12px'}}></div>
+                                        <div className="mold-spot" style={{top: '35%', left: '51%', width: '8px', height: '10px'}}></div>
+                                        <div className="mold-spot" style={{top: '65%', left: '49%', width: '11px', height: '9px'}}></div>
+                                        <div className="mold-spot" style={{top: '80%', left: '47%', width: '9px', height: '11px'}}></div>
+                                    </div>
+                                    <div className="comparison-caption">
+                                        Cracked, discoloured silicone with mold growth
+                                    </div>
+                                </div>
+
+                                {/* After Card */}
+                                <div className="comparison-card">
+                                    <div className="comparison-label after">After</div>
+                                    <div className="tile-scene after-scene">
+                                        <div className="tile-bg">
+                                            <div className="tile-row">
+                                                <div className="tile"></div>
+                                                <div className="tile"></div>
+                                            </div>
+                                            <div className="tile-row">
+                                                <div className="tile"></div>
+                                                <div className="tile"></div>
+                                            </div>
+                                        </div>
+                                        <div className="silicone-line horizontal"></div>
+                                        <div className="silicone-line vertical"></div>
+                                        <div className="shine" style={{top: '35%', left: '25%'}}></div>
+                                        <div className="shine" style={{top: '55%', left: '65%'}}></div>
+                                    </div>
+                                    <div className="comparison-caption">
+                                        Fresh, clean silicone — watertight and professional
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Service Area Map */}
                         <div className="map-wrapper">
                             <div className="section-header" style={{marginBottom: '30px'}}>
@@ -468,7 +704,8 @@
             );
         }
 
-        ReactDOM.render(<SiliconeFlyerApp />, document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<SiliconeFlyerApp />);
     </script>
 
     <script>
