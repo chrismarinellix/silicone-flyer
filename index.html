@@ -284,6 +284,176 @@
             font-size: 0.8rem;
         }
 
+        /* Booking Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            color: white;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .action-buttons {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e5e5e5;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #1a1a1a;
+        }
+
+        .action-button:hover {
+            border-color: #FF6B35;
+            background: #fff5f2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+        }
+
+        .action-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .action-text {
+            flex: 1;
+        }
+
+        .action-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .action-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .time-slots-section {
+            margin-top: 20px;
+        }
+
+        .slots-header {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .weekend-group {
+            margin-bottom: 25px;
+        }
+
+        .weekend-date {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #FF6B35;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .time-slot {
+            padding: 12px;
+            background: #f8f9fa;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #1a1a1a;
+            display: block;
+        }
+
+        .time-slot:hover {
+            background: #FF6B35;
+            border-color: #FF6B35;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero-section {
@@ -326,6 +496,14 @@
                 flex-direction: column;
                 gap: 15px;
             }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         /* Print Styles */
@@ -347,61 +525,109 @@
 
     <script type="text/babel">
         function SiliconeFlyerApp() {
+            const [showModal, setShowModal] = React.useState(false);
+
             const benefits = [
                 {
-                    icon: "💰",
-                    title: "Great Pay Per Job",
-                    desc: "Earn competitive rates for each shower project you complete"
+                    icon: "💵",
+                    title: "$60 Per Shift",
+                    desc: "2-hour shifts at $30/hour. Bank transfer payment"
+                },
+                {
+                    icon: "🌅",
+                    title: "Weekends Only",
+                    desc: "Saturday or Sunday mornings. Keep your weeknights and rest of weekend free"
                 },
                 {
                     icon: "🎓",
-                    title: "Full Training Provided",
-                    desc: "I'll personally teach you everything - zero experience needed"
-                },
-                {
-                    icon: "🚗",
-                    title: "Car Supplied",
-                    desc: "Company vehicle provided - no transport costs or hassles"
-                },
-                {
-                    icon: "⏰",
-                    title: "Flexible Schedule",
-                    desc: "Casual on-call work that fits around your life"
+                    title: "Guided Every Step",
+                    desc: "I'll personally walk you through it. No stress, no pressure"
                 },
                 {
                     icon: "🛠️",
-                    title: "Learn a Trade",
-                    desc: "Develop a valuable skill you'll have for life"
+                    title: "All Tools Supplied",
+                    desc: "Everything you need provided - just bring yourself"
+                },
+                {
+                    icon: "✨",
+                    title: "See Beautiful Results",
+                    desc: "Transform tired bathrooms into fresh, professionally finished spaces"
                 },
                 {
                     icon: "📍",
-                    title: "Local Work",
-                    desc: "Work close to home - must live in the local area"
+                    title: "Local & Casual",
+                    desc: "Within 15km of Sandringham. No long-term commitment required"
                 }
             ];
 
             const requirements = [
-                "Must live locally",
-                "Reliable & motivated",
-                "Ready to learn"
+                "Live within 15km",
+                "Good with your hands",
+                "Weekends available"
             ];
 
+            // Generate next 4 weekends with time slots
+            const getNextWeekends = () => {
+                const weekends = [];
+                const today = new Date();
+                let daysChecked = 0;
+
+                while (weekends.length < 8 && daysChecked < 60) {
+                    const checkDate = new Date(today);
+                    checkDate.setDate(today.getDate() + daysChecked);
+                    const dayOfWeek = checkDate.getDay();
+
+                    // 0 = Sunday, 6 = Saturday
+                    if (dayOfWeek === 0 || dayOfWeek === 6) {
+                        weekends.push({
+                            date: checkDate,
+                            dayName: dayOfWeek === 6 ? 'Saturday' : 'Sunday',
+                            formatted: checkDate.toLocaleDateString('en-AU', {
+                                weekday: 'long',
+                                month: 'long',
+                                day: 'numeric'
+                            })
+                        });
+                    }
+                    daysChecked++;
+                }
+
+                return weekends;
+            };
+
+            const timeSlots = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM'];
+            const weekends = getNextWeekends();
+
+            const createBookingSMS = (date, time) => {
+                const message = `Hi Chris, I'd like to book for ${date} at ${time}. Please confirm.`;
+                return `sms:0417035368?&body=${encodeURIComponent(message)}`;
+            };
+
+            const handlePhoneClick = (e) => {
+                e.preventDefault();
+                setShowModal(true);
+            };
+
             return (
+                <>
                 <div className="flyer-container">
                     {/* Hero Section */}
                     <div className="hero-section">
-                        <div className="wanted-badge">NOW HIRING</div>
+                        <div className="wanted-badge">WEEKEND WORK</div>
                         <h1 className="hero-title">
-                            SILICONE/<br/>CAULKER<br/>WANTED
+                            EARN $30/HR
                         </h1>
                         <p className="hero-subtitle">
-                            Learn a skilled trade & start earning immediately
+                            Perfect for uni students & weekend earners
                         </p>
-                        <div className="phone-hero">
-                            <div className="phone-label">Call Chris</div>
-                            <a href="tel:0417035368" className="phone-link">
-                                <div className="phone-number">0417 035 368</div>
-                            </a>
+                        <div className="phone-hero" onClick={handlePhoneClick} style={{cursor: 'pointer'}}>
+                            <div className="phone-label">📞 📅 💬</div>
+                            <div className="phone-number">
+                                Get Started
+                            </div>
+                            <div style={{fontSize: '14px', marginTop: '8px', opacity: '0.9', fontWeight: '600'}}>
+                                Call • Book • Text
+                            </div>
                         </div>
                     </div>
 
@@ -409,16 +635,25 @@
                     <div className="content-section">
                         {/* Job Summary */}
                         <div className="section-header">
-                            <h2 className="section-title">What You'll Get</h2>
+                            <h2 className="section-title">The Opportunity</h2>
                             <div className="section-desc" style={{textAlign: 'left', maxWidth: '700px'}}>
-                                <p style={{marginBottom: '15px'}}>
-                                    I'm looking for someone local who wants to learn a real trade. This isn't just another casual job – it's a chance to develop a valuable skill that you'll have for life. You'll be working on shower resealing projects, removing old, moldy silicone and replacing it with fresh, professional waterproof seals.
+                                <p style={{marginBottom: '20px'}}>
+                                    <strong>I'm looking for people who are good with their hands.</strong> If you've got an aptitude for detail work, take pride in seeing a beautiful finished result, and want to earn good money on weekends without commitment, this could be perfect for you.
                                 </p>
-                                <p style={{marginBottom: '15px'}}>
-                                    No experience necessary – I'll personally train you from day one. You'll learn proper techniques, how to use the tools, and how to deliver quality work. The pay is competitive for each job completed, and you'll have flexible on-call hours that work around your schedule.
+                                <p style={{marginBottom: '20px'}}>
+                                    You'll be restoring bathrooms to their original beauty – transforming tired showers into fresh, clean, professionally finished spaces. I'll guide you through every step. No experience needed, just a willingness to learn and an eye for detail.
+                                </p>
+                                <p style={{marginBottom: '20px', padding: '20px', background: '#f8f9fa', borderRadius: '8px', borderLeft: '4px solid #FF6B35'}}>
+                                    <strong>Sarah, 2nd year Engineering student:</strong> "I study all week, then Saturday morning I spend a couple of hours making a bathroom look beautiful again. The transformation is incredible – you see the results instantly. Plus I'm learning practical skills while having my whole weekend free."
+                                </p>
+                                <p style={{marginBottom: '20px', padding: '20px', background: '#f8f9fa', borderRadius: '8px', borderLeft: '4px solid #F7931E'}}>
+                                    <strong>Marcus, retail manager:</strong> "I work Monday-Friday in retail. A quick Saturday morning shift and I still get to enjoy my weekend. Chris guides me through everything – no stress, no pressure, and the finished result looks amazing."
                                 </p>
                                 <p>
-                                    I'll provide the vehicle, so no transport worries. You just need to be reliable, motivated, and ready to learn. If you live within 15km of Sandringham and want to start earning while learning a skilled trade, get in touch.
+                                    <strong>$30/hour. 2-hour shifts. Weekends only. All tools supplied.</strong> Perfect for uni students, people working weekdays who want extra income, stay-at-home parents with weekend time, or anyone who's got Saturday/Sunday free and wants to earn without long-term commitment.
+                                </p>
+                                <p style={{marginTop: '15px', fontSize: '0.9rem', color: '#666'}}>
+                                    You'll need an ABN (<a href="https://www.abr.gov.au/business-super-funds-charities/applying-abn" target="_blank" rel="noopener noreferrer" style={{color: '#FF6B35', textDecoration: 'underline'}}>easy to get online for free</a> if you don't have one).
                                 </p>
                             </div>
                         </div>
@@ -447,13 +682,16 @@
 
                         {/* CTA */}
                         <div className="cta-section">
-                            <h3 className="cta-title">Ready to Start?</h3>
+                            <h3 className="cta-title">Start Earning This Weekend</h3>
                             <p className="cta-desc">
-                                No experience? No problem. I'll train you from day one.
+                                Uni student? Working weekdays? Got weekends free? Let's talk.
                             </p>
-                            <a href="tel:0417035368" className="cta-button">
-                                Call Now: 0417 035 368
-                            </a>
+                            <div className="cta-button" onClick={handlePhoneClick} style={{cursor: 'pointer'}}>
+                                📞 Get Started • Call, Book or Text
+                            </div>
+                            <div style={{marginTop: '20px', fontSize: '18px', color: 'rgba(255, 255, 255, 0.9)', fontWeight: '600'}}>
+                                Chris: 0417 035 368
+                            </div>
                             <div className="requirements-list">
                                 {requirements.map((req, index) => (
                                     <div key={index} className="requirement-item">
@@ -465,6 +703,70 @@
                         </div>
                     </div>
                 </div>
+
+                {/* Booking Modal */}
+                {showModal && (
+                    <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                            <div className="modal-header" style={{position: 'relative'}}>
+                                <button className="close-button" onClick={() => setShowModal(false)}>
+                                    ×
+                                </button>
+                                <div className="modal-title">Contact Chris</div>
+                                <div className="modal-subtitle">Call now or book a time</div>
+                            </div>
+
+                            <div className="modal-body">
+                                {/* Action Buttons */}
+                                <div className="action-buttons">
+                                    <a href="tel:0417035368" className="action-button">
+                                        <div className="action-icon">📞</div>
+                                        <div className="action-text">
+                                            <div className="action-title">Call Now</div>
+                                            <div className="action-desc">Speak directly with Chris</div>
+                                        </div>
+                                    </a>
+
+                                    <a href="sms:0417035368?&body=Hi%20Chris%2C%20I%27m%20interested%20in%20the%20weekend%20position.%20Can%20we%20discuss%3F" className="action-button">
+                                        <div className="action-icon">💬</div>
+                                        <div className="action-text">
+                                            <div className="action-title">Send a Text</div>
+                                            <div className="action-desc">Quick message to get started</div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                {/* Time Slots */}
+                                <div className="time-slots-section">
+                                    <div className="slots-header">📅 Book a Time Slot</div>
+                                    <p style={{fontSize: '0.9rem', color: '#666', marginBottom: '20px'}}>
+                                        Click a time to send a booking request via text
+                                    </p>
+
+                                    {weekends.map((weekend, idx) => (
+                                        <div key={idx} className="weekend-group">
+                                            <div className="weekend-date">
+                                                {weekend.formatted}
+                                            </div>
+                                            <div className="time-slots">
+                                                {timeSlots.map((time, timeIdx) => (
+                                                    <a
+                                                        key={timeIdx}
+                                                        href={createBookingSMS(weekend.formatted, time)}
+                                                        className="time-slot"
+                                                    >
+                                                        {time}
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                </>
             );
         }
 
